@@ -1,22 +1,26 @@
-void setup() {
-    Serial.begin(9600);
+//GPIO (LED and Button Handling)
+//We control LEDs for alerts and buttons for user input (e.g., reset button), directly manipulating GPIO registers without digitalWrite or pinMode.
 
-    // Set PB5 (Digital pin 13) as output for LED
-    DDRB |= (1 << DDB5); 
-    // Set PD2 (Digital pin 2) as input with pull-up for button
-    DDRD &= ~(1 << DDD2);
-    PORTD |= (1 << PORTD2); // Enable pull-up
+
+//Setup for GPIO Control:
+void setupGPIO() {
+    DDRB |= (1 << DDB0);    // Set PB0 (LED pin) as output
+    PORTB &= ~(1 << PB0);   // Start with LED off
+
+    DDRD &= ~(1 << DDD2);   // Set PD2 (Button pin) as input
+    PORTD |= (1 << PD2);    // Enable pull-up resistor on button
 }
 
-bool readButton() {
-    return !(PIND & (1 << PIND2)); // Check if button is pressed
+
+
+
+
+//LED Control Functions:
+
+void turnOnLED() {
+    PORTB |= (1 << PB0);    // Turn LED on
 }
 
-void loop() {
-    if (readButton()) {
-        PORTB |= (1 << PORTB5); // Turn on LED
-    } else {
-        PORTB &= ~(1 << PORTB5); // Turn off LED
-    }
-    delay(100); // Short delay for stability
+void turnOffLED() {
+    PORTB &= ~(1 << PB0);   // Turn LED off
 }

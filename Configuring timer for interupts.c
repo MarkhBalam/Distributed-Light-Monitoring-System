@@ -1,20 +1,20 @@
+// Timers and Counters
+//We use timers to control the sampling intervals for the sensors, ensuring that data is sampled and processed at regular intervals.
+
+
+
+
+//Timer Setup and Interrupt Service Routine (ISR):
+void setupTimer() {
+    TCCR1B |= (1 << WGM12) | (1 << CS12);  // CTC mode, prescaler 256
+    OCR1A = 62500;                         // Set compare value for 1s interval (at 16 MHz)
+    TIMSK1 |= (1 << OCIE1A);               // Enable Timer1 compare interrupt
+    sei();                                 // Enable global interrupts
+}
+
 ISR(TIMER1_COMPA_vect) {
-    // Timer1 ISR: Called every second for sampling
-    Serial.println("Timer Event: Sampling data");
-}
-
-void setup() {
-    Serial.begin(9600);
-
-    // Configure Timer1 for CTC mode with 1Hz (1-second intervals)
-    TCCR1A = 0;
-    TCCR1B = (1 << WGM12) | (1 << CS12) | (1 << CS10); // CTC mode, 1024 prescaler
-    OCR1A = 15624; // Compare value for 1Hz at 16MHz
-
-    TIMSK1 = (1 << OCIE1A); // Enable Timer1 Compare A interrupt
-    sei(); // Enable global interrupts
-}
-
-void loop() {
-    // Empty loop since ISR handles timing events
+    // Sampling routine for voltage and current
+    int voltage = readADC(0);
+    int current = readADC(1);
+    // Power calculation (P = V * I) and other processing can be added here
 }
